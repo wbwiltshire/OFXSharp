@@ -12,6 +12,8 @@ namespace OFXSharp
         AP,
         [Description("Accounts Recievable")]
         AR,
+        [Description("Investment")]
+        INVESTMENT,
         NA,
     }
 }

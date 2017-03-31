@@ -120,6 +120,10 @@ namespace OFXSharp
                xpath = Resources.CCAccount;
                accountInfo = "/CCACCTFROM";
                break;
+            case AccountType.INVESTMENT:
+                xpath = Resources.Investment;
+                accountInfo = "/INVACCTFROM";
+                break;
             default:
                throw new OFXException("Account Type not supported. Account type " + type);
          }
@@ -131,7 +135,10 @@ namespace OFXSharp
             case OFXSection.BALANCE:
                return xpath;
             case OFXSection.TRANSACTIONS:
-               return xpath + "/BANKTRANLIST";
+                if (type == AccountType.INVESTMENT)
+                    return xpath + "/INVTRANLIST";
+                else
+                    return xpath + "/BANKTRANLIST";
             case OFXSection.SIGNON:
                return Resources.SignOn;
             case OFXSection.CURRENCY:
@@ -148,16 +155,20 @@ namespace OFXSharp
       /// <returns>List of transactions found in OFX document</returns>
       private void ImportTransations(OFXDocument ofxDocument, XmlDocument doc)
       {
-         var xpath = GetXPath(ofxDocument.AccType, OFXSection.TRANSACTIONS);
+        XmlNodeList transactionNodes = null;
+        var xpath = GetXPath(ofxDocument.AccType, OFXSection.TRANSACTIONS);
 
-         ofxDocument.StatementStart = doc.GetValue(xpath + "//DTSTART").ToDate();
-         ofxDocument.StatementEnd = doc.GetValue(xpath + "//DTEND").ToDate();
+        ofxDocument.StatementStart = doc.GetValue(xpath + "//DTSTART").ToDate();
+        ofxDocument.StatementEnd = doc.GetValue(xpath + "//DTEND").ToDate();
 
-         var transactionNodes = doc.SelectNodes(xpath + "//STMTTRN");
+        if (ofxDocument.AccType == AccountType.INVESTMENT)
+            transactionNodes = doc.SelectNodes(xpath + "//INCOME");
+        else
+            transactionNodes = doc.SelectNodes(xpath + "//STMTTRN");
 
-         ofxDocument.Transactions = new List<Transaction>();
+        ofxDocument.Transactions = new List<Transaction>();
 
-         foreach (XmlNode node in transactionNodes)
+        foreach (XmlNode node in transactionNodes)
             ofxDocument.Transactions.Add(new Transaction(node, ofxDocument.Currency));
       }
 
@@ -169,13 +180,16 @@ namespace OFXSharp
       /// <returns>Account type for account supplied in ofx file</returns>
       private AccountType GetAccountType(string file)
       {
-         if (file.IndexOf("<CREDITCARDMSGSRSV1>") != -1)
+        if (file.IndexOf("<CREDITCARDMSGSRSV1>") != -1)
             return AccountType.CC;
 
-         if (file.IndexOf("<BANKMSGSRSV1>") != -1)
+        if (file.IndexOf("<BANKMSGSRSV1>") != -1)
             return AccountType.BANK;
 
-         throw new OFXException("Unsupported Account Type");
+        if (file.IndexOf("<INVSTMTMSGSRSV1>") != -1)
+            return AccountType.INVESTMENT;
+
+        throw new OFXException("Unsupported Account Type");
       }
 
       /// <summary>
