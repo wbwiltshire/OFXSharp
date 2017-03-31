@@ -72,24 +72,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
     <Compile Include="AccountType.cs" />
+    <Compile Include="ARAccount.cs" />
     <Compile Include="BankAccountType.cs" />
+    <Compile Include="APAccount.cs" />
+    <Compile Include="InvestmentAccount.cs" />
+    <Compile Include="InvestmentTransaction.cs" />
     <Compile Include="OFXException.cs" />
     <Compile Include="OFXHelperMethods.cs" />
     <Compile Include="OFXDocumentParser.cs" />
     <Compile Include="OFXDocument.cs" />
-    <Compile Include="Account.cs" />
+    <Compile Include="BankAccount.cs" />
     <Compile Include="Balance.cs" />
     <Compile Include="OFXTransactionType.cs" />
     <Compile Include="OFXParseException.cs" />
     <Compile Include="SignOn.cs" />
-    <Compile Include="Transaction.cs" />
+    <Compile Include="BankTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Transaction.cs" />
     <Compile Include="TransactionCorrectionType.cs" />
   </ItemGroup>
   <ItemGroup>
