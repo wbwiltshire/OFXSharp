@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Xml;
 
 namespace OFXSharp
 {
-    public class Account
+    public abstract class Account
     {
-        public Account()
-        { }
         public string AccountID { get; set; }
         public AccountType AccountType { get; set; }
-
         public IList<Transaction> Transactions { get; set; }
+
+        public Account()
+        { }
+
+        public abstract void ProcessTransactions(OFXDocumentParser parser, OFXDocument ofx, XmlDocument doc);
     }
 }

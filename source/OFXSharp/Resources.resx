@@ -135,6 +135,9 @@
   <data name="NoMoney" xml:space="preserve">
     <value>You are spending beyond your means so we have had to use your savings to create this budget. Perhaps you need to review your spending...</value>
   </data>
+  <data name="SecurityList" xml:space="preserve">
+    <value>OFX/SECLISTMSGSRSV1/SECLIST/</value>
+  </data>
   <data name="SignOn" xml:space="preserve">
     <value>OFX/SIGNONMSGSRSV1/SONRS</value>
   </data>

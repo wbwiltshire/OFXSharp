@@ -74,43 +74,26 @@ namespace OFXSharp
             switch (ofx.AccType)
                 {
                     case AccountType.BANK:
+                    case AccountType.CC:
                         ofx.Account = new BankAccount(accountNode);
-
                         //Get list of transactions
-                        ImportBankTransactions(ofx, doc);
+                        ofx.Account.ProcessTransactions(this, ofx, doc);
 
                         //Get balance info from ofx doc
                         var ledgerNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/LEDGERBAL");
-                        var avaliableNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/AVAILBAL");
+                        var availableNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/AVAILBAL");
 
                         //If balance info present, populate balance object
                         // ***** OFX files from my bank don't have the 'avaliableNode' node, so i manage a 'null' situation
                         if (ledgerNode != null) // && avaliableNode != null
                         {
-                            ofx.Balance = new Balance(ledgerNode, avaliableNode);
+                            ofx.Balance = new BankBalance(ledgerNode, availableNode);
                         }
                         else
                         {
                             throw new OFXParseException("Balance information not found");
                         }
 
-                        break;
-                    case AccountType.CC:
-                        //ofx.Account = new BankAccount(accountNode);
-                        ////Get balance info from ofx doc
-                        //var ledgerNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/LEDGERBAL");
-                        //var avaliableNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/AVAILBAL");
-
-                        ////If balance info present, populate balance object
-                        //// ***** OFX files from my bank don't have the 'avaliableNode' node, so i manage a 'null' situation
-                        //if (ledgerNode != null) // && avaliableNode != null
-                        //{
-                        //    ofx.Balance = new Balance(ledgerNode, avaliableNode);
-                        //}
-                        //else
-                        //{
-                        //    throw new OFXParseException("Balance information not found");
-                        //}
                         break;
                     case AccountType.AP:
                         ofx.Account = new APAccount(accountNode);
@@ -120,6 +103,22 @@ namespace OFXSharp
                         break;
                     case AccountType.INVESTMENT:
                         ofx.Account = new InvestmentAccount(accountNode);
+
+                        //Get list of transactions
+                        ofx.Account.ProcessTransactions(this, ofx, doc);
+
+                        //Get list of positions
+
+                        //If balance info present, populate balance object
+                        var balanceNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE));
+                        if (balanceNode != null)
+                        {
+                            ofx.Balance = new InvestmentBalance(balanceNode);
+                        }
+                        else
+                        {
+                            throw new OFXParseException("Balance information not found");
+                        }
                         break;
                     default:
                         throw new OFXParseException("Invalid Account type.");
@@ -133,14 +132,13 @@ namespace OFXSharp
          return ofx;
       }
 
-
       /// <summary>
       /// Returns the correct xpath to specified section for given account type
       /// </summary>
       /// <param name="type">Account type</param>
       /// <param name="section">Section of OFX document, e.g. Transaction Section</param>
       /// <exception cref="OFXException">Thrown in account type not supported</exception>
-      private string GetXPath(AccountType type, OFXSection section)
+      internal string GetXPath(AccountType type, OFXSection section)
       {
          string xpath, accountInfo;
 
@@ -167,7 +165,10 @@ namespace OFXSharp
             case OFXSection.ACCOUNTINFO:
                return xpath + accountInfo;
             case OFXSection.BALANCE:
-               return xpath;
+                if (type == AccountType.INVESTMENT)
+                    return xpath + "/INVBAL";
+                else
+                    return xpath;
             case OFXSection.TRANSACTIONS:
                 if (type == AccountType.INVESTMENT)
                     return xpath + "/INVTRANLIST";
@@ -181,49 +182,6 @@ namespace OFXSharp
                throw new OFXException("Unknown section found when retrieving XPath. Section " + section);
          }
       }
-
-        /// <summary>
-        /// Returns list of all transactions in OFX document
-        /// </summary>
-        /// <param name="doc">OFX document</param>
-        /// <returns>List of transactions found in OFX document</returns>
-        private void ImportBankTransactions(OFXDocument ofxDocument, XmlDocument doc)
-        {
-            XmlNodeList transactionNodes = null;
-            var xpath = GetXPath(ofxDocument.AccType, OFXSection.TRANSACTIONS);
-
-            ofxDocument.StatementStart = doc.GetValue(xpath + "//DTSTART").ToDate();
-            ofxDocument.StatementEnd = doc.GetValue(xpath + "//DTEND").ToDate();
-
-            if (ofxDocument.AccType == AccountType.INVESTMENT)
-                transactionNodes = doc.SelectNodes(xpath + "//INCOME");
-            else
-                transactionNodes = doc.SelectNodes(xpath + "//STMTTRN");
-
-            ofxDocument.Account.Transactions = new List<Transaction>();
-
-            foreach (XmlNode node in transactionNodes)
-                ofxDocument.Account.Transactions.Add(new BankTransaction(node, ofxDocument.Currency));
-        }
-
-        private void ImportInvestmentTransactions(OFXDocument ofxDocument, XmlDocument doc)
-        {
-            XmlNodeList transactionNodes = null;
-            //var xpath = GetXPath(ofxDocument.AccType, OFXSection.TRANSACTIONS);
-
-            //ofxDocument.StatementStart = doc.GetValue(xpath + "//DTSTART").ToDate();
-            //ofxDocument.StatementEnd = doc.GetValue(xpath + "//DTEND").ToDate();
-
-            //if (ofxDocument.AccType == AccountType.INVESTMENT)
-            //    transactionNodes = doc.SelectNodes(xpath + "//INCOME");
-            //else
-            //    transactionNodes = doc.SelectNodes(xpath + "//STMTTRN");
-
-            ofxDocument.Account.Transactions = new List<Transaction>();
-
-            foreach (XmlNode node in transactionNodes)
-                ofxDocument.Account.Transactions.Add(new InvestmentTransaction(node, ofxDocument.Currency));
-        }
 
         /// <summary>
         /// Checks account type of supplied file
@@ -240,6 +198,10 @@ namespace OFXSharp
 
         if (file.IndexOf("<INVSTMTMSGSRSV1>") != -1)
             return AccountType.INVESTMENT;
+
+        //TBD
+        //if (file.IndexOf("<SECLISTMSGSRSV1>") != -1)
+        //        return AccountType.SECURITYLIST;
 
         throw new OFXException("Unsupported Account Type");
       }
@@ -339,7 +301,7 @@ namespace OFXSharp
       /// <summary>
       /// Section of OFX Document
       /// </summary>
-      private enum OFXSection
+      internal enum OFXSection
       {
          SIGNON,
          ACCOUNTINFO,

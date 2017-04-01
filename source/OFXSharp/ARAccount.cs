@@ -10,5 +10,9 @@ namespace OFXSharp
         {
             throw new OFXParseException("AR Account type not supported");
         }
+
+        public override void ProcessTransactions(OFXDocumentParser parser, OFXDocument ofx, XmlDocument doc)
+        {
+        }
     }
 }

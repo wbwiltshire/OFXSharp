@@ -115,6 +115,15 @@ namespace OFXSharp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OFX/SECLISTMSGSRSV1/SECLIST/.
+        /// </summary>
+        internal static string SecurityList {
+            get {
+                return ResourceManager.GetString("SecurityList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OFX/SIGNONMSGSRSV1/SONRS.
         /// </summary>
         internal static string SignOn {

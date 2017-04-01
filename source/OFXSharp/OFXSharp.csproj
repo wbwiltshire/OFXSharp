@@ -73,18 +73,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
+    <Compile Include="AccountBalance.cs" />
     <Compile Include="AccountType.cs" />
     <Compile Include="ARAccount.cs" />
     <Compile Include="BankAccountType.cs" />
     <Compile Include="APAccount.cs" />
+    <Compile Include="InvestmentBalance.cs" />
     <Compile Include="InvestmentAccount.cs" />
+    <Compile Include="BuyStockTransaction.cs" />
+    <Compile Include="IncomeTransaction.cs" />
     <Compile Include="InvestmentTransaction.cs" />
     <Compile Include="OFXException.cs" />
     <Compile Include="OFXHelperMethods.cs" />
     <Compile Include="OFXDocumentParser.cs" />
     <Compile Include="OFXDocument.cs" />
     <Compile Include="BankAccount.cs" />
-    <Compile Include="Balance.cs" />
+    <Compile Include="BankBalance.cs" />
     <Compile Include="OFXTransactionType.cs" />
     <Compile Include="OFXParseException.cs" />
     <Compile Include="SignOn.cs" />

@@ -14,6 +14,8 @@ namespace OFXSharp
         AR,
         [Description("Investment")]
         INVESTMENT,
+        [Description("Security List")]
+        SECURITYLIST,
         NA,
     }
 }

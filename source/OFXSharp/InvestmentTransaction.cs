@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml;
+using System.Linq;
+using System.Text;
 
 namespace OFXSharp
 {
-    public class InvestmentTransaction : Transaction
+    public class InvestmentTransaction
     {
         public InvestmentTransaction()
         {
         }
 
-        public InvestmentTransaction(XmlNode node, string currency)
-        {
-
-        }
+        public DateTime TradeDate { get; set; }
+        public DateTime SettleDate { get; set; }
+        public string TransactionType { get; set; }
     }
 }

@@ -7,5 +7,7 @@ namespace OFXSharp
 {
     public class Transaction
     {
+        public string FITransactionID { get; set; }
+        public string Memo { get; set; }
     }
 }

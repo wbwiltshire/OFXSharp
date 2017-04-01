@@ -36,7 +36,25 @@ namespace OFXSharp
             BankAccountType = bankAccountType.GetBankAccountType();
 
             Transactions = new List<Transaction>();
+        }
 
+        /// <summary>
+        /// Returns list of all transactions in OFX document
+        /// </summary>
+        /// <param name="doc">OFX document</param>
+        /// <returns>List of transactions found in OFX document</returns>
+        public override void ProcessTransactions(OFXDocumentParser parser, OFXDocument ofx, XmlDocument doc)
+        {
+            XmlNodeList transactionNodes = null;
+            var xpath = parser.GetXPath(AccountType, OFXDocumentParser.OFXSection.TRANSACTIONS);
+
+            ofx.StatementStart = doc.GetValue(xpath + "//DTSTART").ToDate();
+            ofx.StatementEnd = doc.GetValue(xpath + "//DTEND").ToDate();
+
+            transactionNodes = doc.SelectNodes(xpath + "//STMTTRN");
+
+            foreach (XmlNode node in transactionNodes)
+                Transactions.Add(new BankTransaction(node, ofx.Currency));
         }
     }
 }

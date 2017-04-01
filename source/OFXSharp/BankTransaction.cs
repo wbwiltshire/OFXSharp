@@ -12,15 +12,11 @@ namespace OFXSharp
 
       public decimal Amount { get; set; }
 
-      public string TransactionID { get; set; }
-
       public string Name { get; set; }
 
       public DateTime TransactionInitializationDate { get; set; }
 
       public DateTime FundAvaliabilityDate { get; set; }
-
-      public string Memo { get; set; }
 
       public string IncorrectTransactionID { get; set; }
 
@@ -40,7 +36,7 @@ namespace OFXSharp
 
       public string Currency { get; set; }
 
-      public BankTransaction()
+        public BankTransaction()
       {
       }
 
@@ -62,7 +58,7 @@ namespace OFXSharp
 
          try
          {
-            TransactionID = node.GetValue(".//FITID");
+            FITransactionID = node.GetValue(".//FITID");
          }
          catch (Exception ex)
          {

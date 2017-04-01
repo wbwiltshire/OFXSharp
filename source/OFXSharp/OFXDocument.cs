@@ -17,6 +17,6 @@ namespace OFXSharp
 
         public Account Account { get; set; }
 
-        public Balance Balance { get; set; }
+        public AccountBalance Balance { get; set; }
     }
 }
