@@ -82,6 +82,7 @@
     <Compile Include="OFXDocument.cs" />
     <Compile Include="OFXTransactionType.cs" />
     <Compile Include="OFXParseException.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="SignOn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -89,7 +90,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="StockPosition.cs" />
     <Compile Include="StockInfo.cs" />
     <Compile Include="TransactionCorrectionType.cs" />
     <Compile Include="Transactions.cs" />

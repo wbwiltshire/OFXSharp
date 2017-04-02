@@ -80,7 +80,7 @@ namespace OFXSharp
         public string BrokerID { get; set; }
 
         public IList<StockInfo> StockQuotes { get; set; }
-        public IList<StockPosition> StockPositions { get; set; }
+        public IList<Position> Positions { get; set; }
 
         public InvestmentAccount(XmlNode node)
         {
@@ -124,12 +124,18 @@ namespace OFXSharp
         public void ImportPositions(string xpath, OFXDocument ofx, XmlDocument doc)
         {
             XmlNodeList positionNodes = null;
-            StockPositions = new List<StockPosition>();
+            Positions = new List<Position>();
 
             //Import Position Transactions
             positionNodes = doc.SelectNodes(xpath + "//POSSTOCK");
             foreach (XmlNode node in positionNodes)
-                StockPositions.Add(new StockPosition(node));
+                Positions.Add(new Position(node));
+            positionNodes = doc.SelectNodes(xpath + "//POSOTHER");
+            foreach (XmlNode node in positionNodes)
+                Positions.Add(new Position(node));
+            positionNodes = doc.SelectNodes(xpath + "//POSMF");
+            foreach (XmlNode node in positionNodes)
+                Positions.Add(new Position(node));
         }
 
         public void ImportSECList(XmlNode doc)

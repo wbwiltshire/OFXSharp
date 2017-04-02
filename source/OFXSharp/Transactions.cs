@@ -132,9 +132,6 @@ namespace OFXSharp
     public class IncomeTransaction : Transaction
     {
         public InvestmentTransaction InvTransaction { get; set; }
-        public decimal Total { get; set; }
-        public string SecuritySubAccount { get; set; }
-        public string FundSubAccount { get; set; }
 
         public IncomeTransaction()
         {
@@ -146,13 +143,15 @@ namespace OFXSharp
 
             //Look in first child of the context node (.//)
             FITransactionID = node.GetValue(".//FITID");
+            Memo = node.GetValue(".//MEMO");
             InvTransaction.TradeDate = node.GetValue(".//DTTRADE").ToDate();
             InvTransaction.SettleDate = node.GetValue(".//DTSETTLE").ToDate();
-            Memo = node.GetValue(".//MEMO");
+            InvTransaction.UniqueID = node.GetValue(".//SECID//UNIQUEID");
+            InvTransaction.UniqueIDType = node.GetValue(".//SECID//UNIQUEIDTYPE");
             InvTransaction.TransactionType = node.GetValue(".//INCOMETYPE");
-            Total = Convert.ToDecimal(node.GetValue(".//TOTAL").Trim(), CultureInfo.InvariantCulture);
-            SecuritySubAccount = node.GetValue(".//SUBACCTSEC");
-            FundSubAccount = node.GetValue(".//SUBACCTFUND");
+            InvTransaction.Total = Convert.ToDecimal(node.GetValue(".//TOTAL").Trim(), CultureInfo.InvariantCulture);
+            InvTransaction.SecuritySubAccount = node.GetValue(".//SUBACCTSEC");
+            InvTransaction.FundSubAccount = node.GetValue(".//SUBACCTFUND");
 
         }
     }
@@ -167,9 +166,6 @@ namespace OFXSharp
         public decimal Markup { get; set; }
         public decimal Commission { get; set; }
         public decimal Fees { get; set; }
-        public decimal Total { get; set; }
-        public string SecuritySubAccount { get; set; }
-        public string FundSubAccount { get; set; }
 
         public BuySellStockTransaction()
         {
@@ -182,17 +178,19 @@ namespace OFXSharp
             InvTransaction.TransactionType = node.Name;
             //Look in first child of the context node (.//)
             FITransactionID = node.GetValue(".//FITID");
-            InvTransaction.TradeDate = node.GetValue(".//DTTRADE").ToDate();
-            InvTransaction.SettleDate = node.GetValue(".//DTSETTLE").ToDate();
             Memo = node.GetValue(".//MEMO");
             Units = Convert.ToDecimal(node.GetValue(".//UNITS").Trim(), CultureInfo.InvariantCulture);
             UnitPrice = Convert.ToDecimal(node.GetValue(".//UNITPRICE").Trim(), CultureInfo.InvariantCulture);
             Markup = Convert.ToDecimal(node.GetValue(".//MARKUP").Trim(), CultureInfo.InvariantCulture);
             Commission = Convert.ToDecimal(node.GetValue(".//COMMISSION").Trim(), CultureInfo.InvariantCulture);
             Fees = Convert.ToDecimal(node.GetValue(".//FEES").Trim(), CultureInfo.InvariantCulture);
-            Total = Convert.ToDecimal(node.GetValue(".//TOTAL").Trim(), CultureInfo.InvariantCulture);
-            SecuritySubAccount = node.GetValue(".//SUBACCTSEC");
-            FundSubAccount = node.GetValue(".//SUBACCTFUND");
+            InvTransaction.TradeDate = node.GetValue(".//DTTRADE").ToDate();
+            InvTransaction.SettleDate = node.GetValue(".//DTSETTLE").ToDate();
+            InvTransaction.UniqueID = node.GetValue(".//SECID//UNIQUEID");
+            InvTransaction.UniqueIDType = node.GetValue(".//SECID//UNIQUEIDTYPE");
+            InvTransaction.Total = Convert.ToDecimal(node.GetValue(".//TOTAL").Trim(), CultureInfo.InvariantCulture);
+            InvTransaction.SecuritySubAccount = node.GetValue(".//SUBACCTSEC");
+            InvTransaction.FundSubAccount = node.GetValue(".//SUBACCTFUND");
 
         }
     }
@@ -201,13 +199,19 @@ namespace OFXSharp
     #region InvestmentTransaction
     public class InvestmentTransaction
     {
-        public InvestmentTransaction()
-        {
-        }
-
+        public string UniqueID { get; set; }
+        public string UniqueIDType { get; set; }
+        public decimal Total { get; set; }
         public DateTime TradeDate { get; set; }
         public DateTime SettleDate { get; set; }
         public string TransactionType { get; set; }
+        public string SecuritySubAccount { get; set; }
+        public string FundSubAccount { get; set; }
+
+
+        public InvestmentTransaction()
+        {
+        }
     }
     #endregion
 }
