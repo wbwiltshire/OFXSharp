@@ -77,7 +77,7 @@ namespace OFXSharp
                     case AccountType.CC:
                         ofx.Account = new BankAccount(accountNode);
                         //Get list of transactions
-                        ofx.Account.ProcessTransactions(this, ofx, doc);
+                        ofx.Account.ImportTransactions(this, ofx, doc);
 
                         //Get balance info from ofx doc
                         var ledgerNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/LEDGERBAL");
@@ -105,9 +105,10 @@ namespace OFXSharp
                         ofx.Account = new InvestmentAccount(accountNode);
 
                         //Get list of transactions
-                        ofx.Account.ProcessTransactions(this, ofx, doc);
+                        ofx.Account.ImportTransactions(this, ofx, doc);
 
-                        //Get list of positions
+                        //Get list of positions (requires downcast)
+                        ((InvestmentAccount)ofx.Account).ImportPositions(GetXPath(ofx.AccType, OFXDocumentParser.OFXSection.POSITIONS), ofx, doc);
 
                         //If balance info present, populate balance object
                         var balanceNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE));
@@ -118,6 +119,14 @@ namespace OFXSharp
                         else
                         {
                             throw new OFXParseException("Balance information not found");
+                        }
+
+                        //Process Stock Quote Prices, if present
+                        var SECListNode = doc.SelectSingleNode(Resources.SecurityList);
+                        if (SECListNode != null)
+                        {
+                            //Requires downcast
+                            ((InvestmentAccount)ofx.Account).ImportSECList(SECListNode);
                         }
                         break;
                     default:
@@ -174,6 +183,8 @@ namespace OFXSharp
                     return xpath + "/INVTRANLIST";
                 else
                     return xpath + "/BANKTRANLIST";
+            case OFXSection.POSITIONS:
+                return xpath + "/INVPOSLIST";
             case OFXSection.SIGNON:
                return Resources.SignOn;
             case OFXSection.CURRENCY:
@@ -198,10 +209,6 @@ namespace OFXSharp
 
         if (file.IndexOf("<INVSTMTMSGSRSV1>") != -1)
             return AccountType.INVESTMENT;
-
-        //TBD
-        //if (file.IndexOf("<SECLISTMSGSRSV1>") != -1)
-        //        return AccountType.SECURITYLIST;
 
         throw new OFXException("Unsupported Account Type");
       }
@@ -306,6 +313,7 @@ namespace OFXSharp
          SIGNON,
          ACCOUNTINFO,
          TRANSACTIONS,
+         POSITIONS,
          BALANCE,
          CURRENCY
       }

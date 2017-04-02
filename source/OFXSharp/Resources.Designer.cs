@@ -115,7 +115,7 @@ namespace OFXSharp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OFX/SECLISTMSGSRSV1/SECLIST/.
+        ///   Looks up a localized string similar to OFX/SECLISTMSGSRSV1/SECLIST.
         /// </summary>
         internal static string SecurityList {
             get {

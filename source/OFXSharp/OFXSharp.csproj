@@ -72,35 +72,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="AccountBalance.cs" />
+    <Compile Include="Accounts.cs" />
+    <Compile Include="AccountBalances.cs" />
     <Compile Include="AccountType.cs" />
-    <Compile Include="ARAccount.cs" />
     <Compile Include="BankAccountType.cs" />
-    <Compile Include="APAccount.cs" />
-    <Compile Include="InvestmentBalance.cs" />
-    <Compile Include="InvestmentAccount.cs" />
-    <Compile Include="BuyStockTransaction.cs" />
-    <Compile Include="IncomeTransaction.cs" />
-    <Compile Include="InvestmentTransaction.cs" />
     <Compile Include="OFXException.cs" />
     <Compile Include="OFXHelperMethods.cs" />
     <Compile Include="OFXDocumentParser.cs" />
     <Compile Include="OFXDocument.cs" />
-    <Compile Include="BankAccount.cs" />
-    <Compile Include="BankBalance.cs" />
     <Compile Include="OFXTransactionType.cs" />
     <Compile Include="OFXParseException.cs" />
     <Compile Include="SignOn.cs" />
-    <Compile Include="BankTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Transaction.cs" />
+    <Compile Include="StockPosition.cs" />
+    <Compile Include="StockInfo.cs" />
     <Compile Include="TransactionCorrectionType.cs" />
+    <Compile Include="Transactions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

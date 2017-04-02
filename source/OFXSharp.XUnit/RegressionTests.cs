@@ -14,6 +14,11 @@ namespace OFXSharp.XUnit
 
             var parser = new OFXDocumentParser();
             var ofxDocument = parser.Import(new FileStream(testFile, FileMode.Open));
+            Assert.NotNull(ofxDocument);
+            var balance = (BankBalance)ofxDocument.Balance;
+            Assert.True(balance.LedgerBalance > 0);
+            Assert.NotNull(ofxDocument.Account.Transactions);
+            Assert.True(ofxDocument.Account.Transactions.Count > 0);
             Console.WriteLine("Test finished");
         }
 
@@ -24,6 +29,14 @@ namespace OFXSharp.XUnit
 
             var parser = new OFXDocumentParser();
             var ofxDocument = parser.Import(new FileStream(testFile, FileMode.Open));
+            Assert.NotNull(ofxDocument);
+            var balance = (InvestmentBalance)ofxDocument.Balance;
+            Assert.True(balance.AvailableBalance > 0);
+            Assert.NotNull(ofxDocument.Account.Transactions);
+            Assert.True(ofxDocument.Account.Transactions.Count > 0);
+            var account = (InvestmentAccount)ofxDocument.Account;
+            Assert.NotNull(account.StockQuotes);
+            Assert.True(account.StockQuotes.Count > 0);
             Console.WriteLine("Test finished");
         }
     }
