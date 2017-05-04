@@ -36,9 +36,11 @@ namespace OFXSharp
       private OFXDocument Parse(string ofxString)
       {
          OFXDocument ofx = new OFXDocument { AccType = GetAccountType(ofxString) };
+         XmlNode ledgerNode;
+         XmlNode availableNode;
 
-         //Load into xml document
-         var doc = new XmlDocument();
+            //Load into xml document
+            var doc = new XmlDocument();
          doc.Load(new StringReader(ofxString));
 
          var currencyNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.CURRENCY));
@@ -74,20 +76,40 @@ namespace OFXSharp
             switch (ofx.AccType)
                 {
                     case AccountType.BANK:
-                    case AccountType.CC:
                         ofx.Account = new BankAccount(accountNode);
                         //Get list of transactions
                         ofx.Account.ImportTransactions(this, ofx, doc);
 
                         //Get balance info from ofx doc
-                        var ledgerNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/LEDGERBAL");
-                        var availableNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/AVAILBAL");
+                        ledgerNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/LEDGERBAL");
+                        availableNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/AVAILBAL");
 
                         //If balance info present, populate balance object
                         // ***** OFX files from my bank don't have the 'avaliableNode' node, so i manage a 'null' situation
                         if (ledgerNode != null) // && avaliableNode != null
                         {
                             ofx.Balance = new BankBalance(ledgerNode, availableNode);
+                        }
+                        else
+                        {
+                            throw new OFXParseException("Balance information not found");
+                        }
+
+                        break;
+                    case AccountType.CC:
+                        ofx.Account = new CreditCardAccount(accountNode);
+                        //Get list of transactions
+                        ofx.Account.ImportTransactions(this, ofx, doc);
+
+                        //Get balance info from ofx doc
+                        ledgerNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/LEDGERBAL");
+                        availableNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.BALANCE) + "/AVAILBAL");
+
+                        //If balance info present, populate balance object
+                        // ***** OFX files from my bank don't have the 'avaliableNode' node, so i manage a 'null' situation
+                        if (ledgerNode != null) // && avaliableNode != null
+                        {
+                            ofx.Balance = new CreditCardBalance(ledgerNode, availableNode);
                         }
                         else
                         {

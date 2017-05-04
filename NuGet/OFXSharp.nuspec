@@ -2,13 +2,13 @@
  <package>
      <metadata>
      <id>OFXSharp</id>
-     <version>1.0.5003</version>
+     <version>1.0.5004</version>
      <title>OFXSharp</title>
      <authors>James Hollingworth and Antonio Milesi Bastos</authors>
      <owners>wbwiltshire</owners>
      <requireLicenseAcceptance>false</requireLicenseAcceptance>
      <description>C# OFX file parser</description>
-     <releaseNotes>Added Investment OFX Message set.</releaseNotes>
+     <releaseNotes>Added Credit Card OFX Message set.</releaseNotes>
      <copyright>Copyright © milesibastos.com 2014</copyright>
 	 <dependencies>
 		<dependency id="SgmlReader" version="1.8.11"/>

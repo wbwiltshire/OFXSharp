@@ -23,6 +23,20 @@ namespace OFXSharp.XUnit
         }
 
         [Fact]
+        public void OFXCreditCardText()
+        {
+            string testFile = "creditcard.ofx";
+
+            var parser = new OFXDocumentParser();
+            var ofxDocument = parser.Import(new FileStream(testFile, FileMode.Open));
+            Assert.NotNull(ofxDocument);
+            var balance = (CreditCardBalance)ofxDocument.Balance;
+            Assert.NotNull(ofxDocument.Account.Transactions);
+            Assert.True(ofxDocument.Account.Transactions.Count > 0);
+            Console.WriteLine("Test finished");
+        }
+
+        [Fact]
         public void OFXInvestmentText()
         {
             string testFile = "investment.ofx";

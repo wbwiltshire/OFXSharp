@@ -74,6 +74,50 @@ namespace OFXSharp
     }
     #endregion
 
+    #region CreditCardAccount
+    public class CreditCardAccount : Account
+    {
+        #region CreditCard Only
+        #endregion
+
+        public CreditCardAccount(XmlNode node)
+        {
+            AccountType = AccountType.CC;
+
+            AccountID = node.GetValue("//ACCTID");
+
+            //Get Bank Account Type from XML
+            //string ccAccountType = node.GetValue("//ACCTTYPE");
+            string ccAccountType = "CREDITCARD";
+
+            //Check that it has been set
+            if (String.IsNullOrEmpty(ccAccountType))
+                throw new OFXParseException("Credit Card Account type unknown");
+
+            Transactions = new List<Transaction>();
+        }
+
+        /// <summary>
+        /// Returns list of all transactions in OFX document
+        /// </summary>
+        /// <param name="doc">OFX document</param>
+        /// <returns>List of transactions found in OFX document</returns>
+        public override void ImportTransactions(OFXDocumentParser parser, OFXDocument ofx, XmlDocument doc)
+        {
+            XmlNodeList transactionNodes = null;
+            var xpath = parser.GetXPath(AccountType, OFXDocumentParser.OFXSection.TRANSACTIONS);
+
+            ofx.StatementStart = doc.GetValue(xpath + "//DTSTART").ToDate();
+            ofx.StatementEnd = doc.GetValue(xpath + "//DTEND").ToDate();
+
+            transactionNodes = doc.SelectNodes(xpath + "//STMTTRN");
+
+            foreach (XmlNode node in transactionNodes)
+                Transactions.Add(new CreditCardTransaction(node, ofx.Currency));
+        }
+    }
+    #endregion
+
     #region Investment Account
     public class InvestmentAccount : Account
     {
