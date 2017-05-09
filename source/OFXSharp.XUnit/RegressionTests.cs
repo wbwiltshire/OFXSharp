@@ -39,7 +39,8 @@ namespace OFXSharp.XUnit
         [Fact]
         public void OFXInvestmentText()
         {
-            string testFile = "investment.ofx";
+            //string testFile = "investment.ofx";
+            string testFile = "import.ofx";
 
             var parser = new OFXDocumentParser();
             var ofxDocument = parser.Import(new FileStream(testFile, FileMode.Open));

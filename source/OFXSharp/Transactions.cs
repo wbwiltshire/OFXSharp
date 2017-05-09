@@ -220,6 +220,7 @@ namespace OFXSharp
         }
     }
     #endregion Credit Card Transaction
+
     #region IncomeTransaction
     public class IncomeTransaction : Transaction
     {
@@ -256,6 +257,7 @@ namespace OFXSharp
         public decimal Units { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Markup { get; set; }
+        public decimal Markdown { get; set; }
         public decimal Commission { get; set; }
         public decimal Fees { get; set; }
 
@@ -273,7 +275,14 @@ namespace OFXSharp
             Memo = node.GetValue(".//MEMO");
             Units = Convert.ToDecimal(node.GetValue(".//UNITS").Trim(), CultureInfo.InvariantCulture);
             UnitPrice = Convert.ToDecimal(node.GetValue(".//UNITPRICE").Trim(), CultureInfo.InvariantCulture);
-            Markup = Convert.ToDecimal(node.GetValue(".//MARKUP").Trim(), CultureInfo.InvariantCulture);
+            switch (InvTransaction.TransactionType) { 
+                case "BUYSTOCK":
+                    Markup = Convert.ToDecimal(node.GetValue(".//MARKUP").Trim(), CultureInfo.InvariantCulture);
+                    break;
+                case "SELLSTOCK":
+                    Markdown = Convert.ToDecimal(node.GetValue(".//MARKDOWN").Trim(), CultureInfo.InvariantCulture);
+                    break;
+            }
             Commission = Convert.ToDecimal(node.GetValue(".//COMMISSION").Trim(), CultureInfo.InvariantCulture);
             Fees = Convert.ToDecimal(node.GetValue(".//FEES").Trim(), CultureInfo.InvariantCulture);
             InvTransaction.TradeDate = node.GetValue(".//DTTRADE").ToDate();
