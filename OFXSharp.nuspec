@@ -2,17 +2,21 @@
  <package>
      <metadata>
      <id>OFXSharp</id>
-     <version>1.0.5005</version>
+     <version>1.0.5006</version>
      <title>OFXSharp</title>
      <authors>James Hollingworth and Antonio Milesi Bastos</authors>
      <owners>wbwiltshire</owners>
      <requireLicenseAcceptance>false</requireLicenseAcceptance>
      <description>C# OFX file parser</description>
-     <releaseNotes>Fixed Markup/Markdown for Buy/Sell Stock.</releaseNotes>
+     <releaseNotes>DotNet Core and Framewor version available. Replaced SGMLReader.</releaseNotes>
      <copyright>Copyright © milesibastos.com 2014</copyright>
 	 <dependencies>
-		<dependency id="SgmlReader" version="1.8.11"/>
+		<dependency id="Microsoft.Xml.SgmlReader" version="1.8.14"/>
 	 </dependencies>
      <tags></tags>
      </metadata>
+     <files>
+          <file src="source\OFXSharp\bin\Debug\OFXSharp.dll" target="lib\net462\OFXSharp.dll" />
+          <file src="source\OFXSharpCore\bin\Debug\netcoreapp2.0\OFXSharp.dll" target="lib\netcoreapp2.0\OFXSharp.dll" />
+     </files>
  </package>

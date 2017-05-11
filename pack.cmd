@@ -1,4 +1,4 @@
-source\.nuget\nuget.exe pack source\OFXSharp\OFXSharp.csproj -Prop Configuration=Release
+nuget.exe pack OFXSharp.nuspec -Prop
 echo # update Project Url: https://github.com/milesibastos/OFXSharp
 echo # update License Url: http://opensource.org/licenses/MIT
 pause
