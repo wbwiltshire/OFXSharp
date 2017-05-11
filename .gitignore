@@ -100,6 +100,7 @@ publish/
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
 packages/
+*.nupkg
 
 # Windows Azure Build Output
 csx
@@ -156,7 +157,3 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
-
-# Ignore NuGet packages
-NuGet/*.nupkg
-NuGet/**lib
