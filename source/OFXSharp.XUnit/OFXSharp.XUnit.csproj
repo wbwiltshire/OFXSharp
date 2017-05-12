@@ -94,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OFXSharp\OFXSharp.csproj">
-      <Project>{7bba813d-ee93-491a-b0c7-fbd588e393cb}</Project>
+      <Project>{a87e7afa-e0f0-4c37-80de-ac3018661177}</Project>
       <Name>OFXSharp</Name>
     </ProjectReference>
   </ItemGroup>
