@@ -154,6 +154,11 @@ namespace OFXSharp
             foreach (XmlNode node in transactionNodes)
                 Transactions.Add(new IncomeTransaction(node, ofx.Currency));
 
+            //Import Transfer Transactions
+            transactionNodes = doc.SelectNodes(xpath + "//INVBANKTRAN");
+            foreach (XmlNode node in transactionNodes)
+                Transactions.Add(new InvestmentTransferTransaction(node, ofx.Currency));
+
             //Import Buy Stock Transactions
             transactionNodes = doc.SelectNodes(xpath + "//BUYSTOCK");
             foreach (XmlNode node in transactionNodes)

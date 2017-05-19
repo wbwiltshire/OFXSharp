@@ -275,7 +275,8 @@ namespace OFXSharp
             Memo = node.GetValue(".//MEMO");
             Units = Convert.ToDecimal(node.GetValue(".//UNITS").Trim(), CultureInfo.InvariantCulture);
             UnitPrice = Convert.ToDecimal(node.GetValue(".//UNITPRICE").Trim(), CultureInfo.InvariantCulture);
-            switch (InvTransaction.TransactionType) { 
+            switch (InvTransaction.TransactionType)
+            {
                 case "BUYSTOCK":
                     Markup = Convert.ToDecimal(node.GetValue(".//MARKUP").Trim(), CultureInfo.InvariantCulture);
                     break;
@@ -309,9 +310,31 @@ namespace OFXSharp
         public string SecuritySubAccount { get; set; }
         public string FundSubAccount { get; set; }
 
-
         public InvestmentTransaction()
         {
+        }
+    }
+    #endregion
+
+    #region InvestmentTransferTransaction
+    public class InvestmentTransferTransaction : Transaction
+    {
+        public string TransactionType { get; set; }
+        public DateTime DatePosted { get; set; }
+        public decimal Total { get; set; }
+        public string Name { get; set; }
+        public string FundSubAccount { get; set; }
+
+        public InvestmentTransferTransaction(XmlNode node, string currency)
+        {
+            //Look in first child of the context node (.//)
+            FITransactionID = node.GetValue(".//FITID");
+            Memo = node.GetValue(".//MEMO");
+            TransactionType = node.GetValue(".//TRNTYPE");
+            DatePosted = node.GetValue(".//DTPOSTED").ToDate();
+            Total = Convert.ToDecimal(node.GetValue(".//TRNAMT").Trim(), CultureInfo.InvariantCulture);
+            Name = node.GetValue(".//NAME");
+            FundSubAccount = node.GetValue(".//SUBACCTFUND");
         }
     }
     #endregion
