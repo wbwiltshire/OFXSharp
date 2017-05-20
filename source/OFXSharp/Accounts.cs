@@ -123,7 +123,7 @@ namespace OFXSharp
     {
         public string BrokerID { get; set; }
 
-        public IList<StockInfo> StockQuotes { get; set; }
+        public IList<SECInfo> StockQuotes { get; set; }
         public IList<Position> Positions { get; set; }
 
         public InvestmentAccount(XmlNode node)
@@ -190,13 +190,22 @@ namespace OFXSharp
         public void ImportSECList(XmlNode doc)
         {
             XmlNodeList quoteNodes = null;
-            StockQuotes = new List<StockInfo>();
+            StockQuotes = new List<SECInfo>();
 
             //Import Stock Quotes Transactions
             quoteNodes = doc.SelectNodes("//STOCKINFO");
             foreach (XmlNode node in quoteNodes)
                 StockQuotes.Add(new StockInfo(node));
 
+            //Import Mutual Fund Info
+            quoteNodes = doc.SelectNodes("//MFINFO");
+            foreach (XmlNode node in quoteNodes)
+                StockQuotes.Add(new MutualFundInfo(node));
+
+            //Import Money Market Info
+            quoteNodes = doc.SelectNodes("//OTHERINFO");
+            foreach (XmlNode node in quoteNodes)
+                StockQuotes.Add(new OtherInfo(node));
         }
     }
     #endregion

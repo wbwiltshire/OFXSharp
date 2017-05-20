@@ -5,15 +5,15 @@
     <AssemblyName>OFXSharp</AssemblyName>
     <RootNamespace>OFXSharp</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.5007</Version>
+    <Version>1.0.5008</Version>
     <Authors>James Hollingworth and Antonio Milesi Bastos</Authors>
     <Description>C# OFX file parser</Description>
     <Copyright>Copyright © milesibastos.com 2014</Copyright>
-    <PackageReleaseNotes>DotNet Core and Framework version available. Replaced SGMLReader. Added Investment Transfer message.</PackageReleaseNotes>
+    <PackageReleaseNotes>DotNet Core and Framework version available. Replaced SGMLReader. Added Investment Transfer message, Mutual Fund Info, and Other Info.</PackageReleaseNotes>
     <RepositoryUrl />
     <PackageProjectUrl>https://github.com/wbwiltshire/OFXSharp</PackageProjectUrl>
-    <AssemblyVersion>1.0.5007.0</AssemblyVersion>
-    <FileVersion>1.0.5007.0</FileVersion>
+    <AssemblyVersion>1.0.5008.0</AssemblyVersion>
+    <FileVersion>1.0.5008.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
