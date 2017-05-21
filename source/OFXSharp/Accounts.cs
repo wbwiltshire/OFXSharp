@@ -226,6 +226,11 @@ namespace OFXSharp
             quoteNodes = doc.SelectNodes("//OTHERINFO");
             foreach (XmlNode node in quoteNodes)
                 StockQuotes.Add(new OtherInfo(node));
+
+            //Import Stock Option Quotes Info
+            quoteNodes = doc.SelectNodes("//OPTINFO");
+            foreach (XmlNode node in quoteNodes)
+                StockQuotes.Add(new OptionInfo(node));
         }
     }
     #endregion

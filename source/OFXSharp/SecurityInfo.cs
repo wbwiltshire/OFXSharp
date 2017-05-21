@@ -36,6 +36,31 @@ namespace OFXSharp
         }
     }
 
+    public class OptionInfo : SECInfo
+    {
+
+        public string OptionType { get; set; }
+        public string AssetClass { get; set; }
+        public string FIAssetClass { get; set; }
+        public decimal StrikePrice { get; set; }
+        public DateTime ExpirationDt { get; set; }
+
+        public OptionInfo(XmlNode node)
+        {
+            UniqueID = node.GetValue(".//SECID//UNIQUEID");
+            UniqueIDType = node.GetValue(".//SECID//UNIQUEIDTYPE");
+            SECName = node.GetValue(".//SECNAME");
+            Ticker = node.GetValue(".//TICKER");
+            UnitPrice = Convert.ToDecimal(node.GetValue(".//UNITPRICE").Trim());
+            AsOfDate = node.GetValue(".//DTASOF").ToDate();
+            OptionType = node.GetValue("//OPTTYPE");
+            StrikePrice = Convert.ToDecimal(node.GetValue(".//STRIKEPRICE").Trim());
+            ExpirationDt = node.GetValue(".//DTEXPIRE").ToDate();
+            AssetClass = node.GetValue(("//ASSETCLASS"));
+            FIAssetClass = node.GetValue(("//FIASSETCLASS"));
+        }
+    }
+
     public class MutualFundInfo : SECInfo
     {
         public string Memo { get; set; }
