@@ -32,10 +32,6 @@ namespace OFXSharp
         public BankAccount TransactionSenderAccount { get; set; }
         public string Currency { get; set; }
 
-        public BankTransaction()
-        {
-        }
-
         public BankTransaction(XmlNode node, string currency)
         {
             TransType = GetTransactionType(node.GetValue(".//TRNTYPE"));
@@ -138,10 +134,6 @@ namespace OFXSharp
         public string Name { get; set; }
         public string Currency { get; set; }
 
-        public CreditCardTransaction()
-        {
-        }
-
         public CreditCardTransaction(XmlNode node, string currency)
         {
             TransType = GetTransactionType(node.GetValue(".//TRNTYPE"));
@@ -226,10 +218,6 @@ namespace OFXSharp
     {
         public InvestmentTransaction InvTransaction { get; set; }
 
-        public IncomeTransaction()
-        {
-        }
-
         public IncomeTransaction(XmlNode node, string currency)
         {
             InvTransaction = new InvestmentTransaction();
@@ -260,10 +248,6 @@ namespace OFXSharp
         public decimal Markdown { get; set; }
         public decimal Commission { get; set; }
         public decimal Fees { get; set; }
-
-        public BuySellStockTransaction()
-        {
-        }
 
         public BuySellStockTransaction(XmlNode node, string currency)
         {
@@ -298,6 +282,84 @@ namespace OFXSharp
     }
     #endregion
 
+    #region BuySellStockOptionTransaction
+    public class BuySellStockOptionTransaction : Transaction
+    {
+        public InvestmentTransaction InvTransaction { get; set; }
+        public decimal Units { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Markup { get; set; }
+        public decimal Markdown { get; set; }
+        public decimal Commission { get; set; }
+        public decimal Fees { get; set; }
+        public string Type { get; set; }
+
+        public BuySellStockOptionTransaction(XmlNode node, string currency)
+        {
+            InvTransaction = new InvestmentTransaction();
+
+            InvTransaction.TransactionType = node.Name;
+            //Look in first child of the context node (.//)
+            FITransactionID = node.GetValue(".//FITID");
+            Memo = node.GetValue(".//MEMO");
+            Units = Convert.ToDecimal(node.GetValue(".//UNITS").Trim(), CultureInfo.InvariantCulture);
+            UnitPrice = Convert.ToDecimal(node.GetValue(".//UNITPRICE").Trim(), CultureInfo.InvariantCulture);
+            switch (InvTransaction.TransactionType)
+            {
+                case "BUYOPT":
+                    Markup = Convert.ToDecimal(node.GetValue(".//MARKUP").Trim(), CultureInfo.InvariantCulture);
+                    Type = node.GetValue(".//OPTBUYTYPE");
+                    break;
+                case "SELLOPT":
+                    Markdown = Convert.ToDecimal(node.GetValue(".//MARKDOWN").Trim(), CultureInfo.InvariantCulture);
+                    Type = node.GetValue(".//OPTSELLTYPE");
+                    break;
+            }
+            Commission = Convert.ToDecimal(node.GetValue(".//COMMISSION").Trim(), CultureInfo.InvariantCulture);
+            Fees = Convert.ToDecimal(node.GetValue(".//FEES").Trim(), CultureInfo.InvariantCulture);
+            Type = node.GetValue(".//OPTBUYTYPE");
+            InvTransaction.TradeDate = node.GetValue(".//DTTRADE").ToDate();
+            InvTransaction.SettleDate = node.GetValue(".//DTSETTLE").ToDate();
+            InvTransaction.UniqueID = node.GetValue(".//SECID//UNIQUEID");
+            InvTransaction.UniqueIDType = node.GetValue(".//SECID//UNIQUEIDTYPE");
+            InvTransaction.Total = Convert.ToDecimal(node.GetValue(".//TOTAL").Trim(), CultureInfo.InvariantCulture);
+            InvTransaction.SecuritySubAccount = node.GetValue(".//SUBACCTSEC");
+            InvTransaction.FundSubAccount = node.GetValue(".//SUBACCTFUND");
+
+        }
+    }
+    #endregion
+
+    #region StockTransferTransaction
+    public class StockTransferTransaction : Transaction
+    {
+        public InvestmentTransaction InvTransaction { get; set; }
+        public decimal Units { get; set; }
+        public decimal UnitPrice { get; set; }
+        public string Action { get; set; }
+
+        public StockTransferTransaction(XmlNode node, string currency)
+        {
+            InvTransaction = new InvestmentTransaction();
+
+            InvTransaction.TransactionType = node.Name;
+            //Look in first child of the context node (.//)
+            FITransactionID = node.GetValue(".//FITID");
+            Memo = node.GetValue(".//MEMO");
+            Units = Convert.ToDecimal(node.GetValue(".//UNITS").Trim(), CultureInfo.InvariantCulture);
+            UnitPrice = Convert.ToDecimal(node.GetValue(".//UNITPRICE").Trim(), CultureInfo.InvariantCulture);
+            Action = node.GetValue(".//TFERACTION");
+            InvTransaction.TradeDate = node.GetValue(".//DTTRADE").ToDate();
+            InvTransaction.SettleDate = node.GetValue(".//DTSETTLE").ToDate();
+            InvTransaction.UniqueID = node.GetValue(".//SECID//UNIQUEID");
+            InvTransaction.UniqueIDType = node.GetValue(".//SECID//UNIQUEIDTYPE");
+            InvTransaction.Total = 0;
+            InvTransaction.SecuritySubAccount = node.GetValue(".//SUBACCTSEC");
+            
+        }
+    }
+    #endregion
+
     #region InvestmentTransaction
     public class InvestmentTransaction
     {
@@ -310,13 +372,10 @@ namespace OFXSharp
         public string SecuritySubAccount { get; set; }
         public string FundSubAccount { get; set; }
 
-        public InvestmentTransaction()
-        {
-        }
     }
     #endregion
 
-    #region InvestmentTransferTransaction
+    #region InvestmentTransferTransaction (Cash)
     public class InvestmentTransferTransaction : Transaction
     {
         public string TransactionType { get; set; }

@@ -154,20 +154,35 @@ namespace OFXSharp
             foreach (XmlNode node in transactionNodes)
                 Transactions.Add(new IncomeTransaction(node, ofx.Currency));
 
-            //Import Transfer Transactions
+            //Import Cash Transfer Transactions
             transactionNodes = doc.SelectNodes(xpath + "//INVBANKTRAN");
             foreach (XmlNode node in transactionNodes)
                 Transactions.Add(new InvestmentTransferTransaction(node, ofx.Currency));
+
+            //Import Stock Transfer Transactions
+            transactionNodes = doc.SelectNodes(xpath + "//TRANSFER");
+            foreach (XmlNode node in transactionNodes)
+                Transactions.Add(new StockTransferTransaction(node, ofx.Currency));
 
             //Import Buy Stock Transactions
             transactionNodes = doc.SelectNodes(xpath + "//BUYSTOCK");
             foreach (XmlNode node in transactionNodes)
                 Transactions.Add(new BuySellStockTransaction(node, ofx.Currency));
 
+            //Import Buy Option Transactions
+            transactionNodes = doc.SelectNodes(xpath + "//BUYOPT");
+            foreach (XmlNode node in transactionNodes)
+                Transactions.Add(new BuySellStockOptionTransaction(node, ofx.Currency));
+
             //Import Sell Stock Transactions
             transactionNodes = doc.SelectNodes(xpath + "//SELLSTOCK");
             foreach (XmlNode node in transactionNodes)
                 Transactions.Add(new BuySellStockTransaction(node, ofx.Currency));
+
+            //Import Buy Option Transactions
+            transactionNodes = doc.SelectNodes(xpath + "//SELLOPT");
+            foreach (XmlNode node in transactionNodes)
+                Transactions.Add(new BuySellStockOptionTransaction(node, ofx.Currency));
 
             //Import Sell Other Stock Transactions
             transactionNodes = doc.SelectNodes(xpath + "//SELLOTHER");

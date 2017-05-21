@@ -5,15 +5,15 @@
     <AssemblyName>OFXSharp</AssemblyName>
     <RootNamespace>OFXSharp</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.5009</Version>
+    <Version>1.1.0</Version>
     <Authors>James Hollingworth and Antonio Milesi Bastos</Authors>
     <Description>C# OFX file parser</Description>
     <Copyright>Copyright © milesibastos.com 2014</Copyright>
-    <PackageReleaseNotes>DotNet Core and Framework version available. Added SellOther message</PackageReleaseNotes>
+    <PackageReleaseNotes>DotNet Core and Framework version available. Added Stock Transfer and Stock Options message sets.</PackageReleaseNotes>
     <RepositoryUrl />
     <PackageProjectUrl>https://github.com/wbwiltshire/OFXSharp</PackageProjectUrl>
-    <AssemblyVersion>1.0.5009.0</AssemblyVersion>
-    <FileVersion>1.0.5009.0</FileVersion>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <FileVersion>1.1.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
