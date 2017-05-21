@@ -168,6 +168,11 @@ namespace OFXSharp
             transactionNodes = doc.SelectNodes(xpath + "//SELLSTOCK");
             foreach (XmlNode node in transactionNodes)
                 Transactions.Add(new BuySellStockTransaction(node, ofx.Currency));
+
+            //Import Sell Other Stock Transactions
+            transactionNodes = doc.SelectNodes(xpath + "//SELLOTHER");
+            foreach (XmlNode node in transactionNodes)
+                Transactions.Add(new BuySellStockTransaction(node, ofx.Currency));
         }
 
         public void ImportPositions(string xpath, OFXDocument ofx, XmlDocument doc)
