@@ -39,8 +39,8 @@ namespace OFXSharp
          XmlNode ledgerNode;
          XmlNode availableNode;
 
-            //Load into xml document
-            var doc = new XmlDocument();
+         //Load into xml document
+         var doc = new XmlDocument();
          doc.Load(new StringReader(ofxString));
 
          var currencyNode = doc.SelectSingleNode(GetXPath(ofx.AccType, OFXSection.CURRENCY));

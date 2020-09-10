@@ -8,7 +8,7 @@ namespace OFXSharp.XUnit
     public class RegressionTests
     {
         [Fact]
-        public void OFXBankText()
+        public void OFXBankTest()
         {
             string testFile = "santander.ofx";
 
@@ -23,7 +23,7 @@ namespace OFXSharp.XUnit
         }
 
         [Fact]
-        public void OFXCreditCardText()
+        public void OFXCreditCardTest()
         {
             string testFile = "creditcard.ofx";
 
@@ -37,7 +37,7 @@ namespace OFXSharp.XUnit
         }
 
         [Fact]
-        public void OFXInvestmentText()
+        public void OFXInvestmentTest()
         {
             //string testFile = "investment.ofx";
             string testFile = "import.ofx";
